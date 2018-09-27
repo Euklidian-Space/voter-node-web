@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Button, TextField } from '@material-ui/core';
 
-interface ILoginForm {
-  onSubmit: (arg: object) => void;
+export interface ILoginForm {
+  onSubmit: (arg: {email: string, password: string}) => void;
 }
 
-interface ILoginFormState {
+export interface ILoginFormState {
   email: string;
   password: string;
 }

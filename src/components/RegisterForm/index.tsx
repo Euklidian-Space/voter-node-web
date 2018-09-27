@@ -2,14 +2,14 @@ import * as React from 'react';
 import { Button, TextField } from '@material-ui/core';
 const Component = React.Component;
 
-interface IRegisterForm {
+export interface IRegisterForm {
   onSubmit: (arg: {
+    confirmPassword: string,
     email: string, 
-    password: string, 
-    confirmPassword: string}) => void;
+    password: string}) => void;
 }
 
-interface IRegisterFormState {
+export interface IRegisterFormState {
   email: string;
   password: string;
   confirmPassword: string;
@@ -25,15 +25,22 @@ class RegisterForm extends Component<IRegisterForm, IRegisterFormState> {
   constructor(props: IRegisterForm) {
     super(props);
     this.state = {
+      confirmPassword: '',
       email: '',
-      password: '',
-      confirmPassword: ''
+      password: ''
     };
 
     this.onClick = this.onClick.bind(this);    
     this.onChange = this.onChange.bind(this);
 
     this.fieldProps = {
+      confirmPassword: {
+        inputProps: {
+          type: "password"
+        },
+        onChange: this.onChange("confirmPassword"),
+        placeholder: "confirm password"
+      },
       email: {
         name: "email",
         onChange: this.onChange("email"),
@@ -46,28 +53,15 @@ class RegisterForm extends Component<IRegisterForm, IRegisterFormState> {
         name: "password",
         onChange: this.onChange("password"),
         placeholder: "password"
-      },
-      confirmPassword: {
-        inputProps: {
-          type: "password"
-        },
-        onChange: this.onChange("confirmPassword"),
-        placeholder: "confirm password"
       }
     };
   }
 
   public render() {
-    const { fieldProps } = this;
     const { containerStyle, buttonStyle } = styles;
     return (
       <form style={containerStyle}>
-        <TextField {...fieldProps.email}/>
-
-        <TextField {...fieldProps.password}/>
-
-        <TextField {...fieldProps.confirmPassword}/>
-
+        {this.renderTextFields()}
         <Button style={buttonStyle} onClick={this.onClick}>
           Register
         </Button>
@@ -95,20 +89,48 @@ class RegisterForm extends Component<IRegisterForm, IRegisterFormState> {
   private onClick() {
     this.props.onSubmit(this.state);
   }
+
+  private renderTextFields() {
+    const { fieldProps } = this;
+    const errorState = {
+      error: true,
+      label: "must match password field"
+    };
+    let confirmPasswordProps = fieldProps.confirmPassword;
+    if (this.state.password !== this.state.confirmPassword) {
+      confirmPasswordProps = Object.assign(errorState, confirmPasswordProps);
+    }
+
+    return (
+      <div>
+        <TextField style={styles.fieldStyle} {...fieldProps.email}/>
+        <TextField style={styles.fieldStyle} {...fieldProps.password}/>
+        <TextField style={styles.fieldStyle} {...confirmPasswordProps} />
+      </div>
+    );
+  }
 }
 
 const styles = {
 
-  buttonStyle: {
+  fieldStyle: {
+    flex: 1,
     marginTop: 10
   } as React.CSSProperties,
 
+  buttonStyle: {
+    marginTop: 10,
+    flex: 1,
+    alignSelf: "flex-start",
+    marginLeft: 35
+  } as React.CSSProperties,
+
   containerStyle: {
-    alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-evenly",
-    width: 450
+    justifyContent: "center",
+    alignItems: "center",
+    width: 300
   } as React.CSSProperties
 
 };

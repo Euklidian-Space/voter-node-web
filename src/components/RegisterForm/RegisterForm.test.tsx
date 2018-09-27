@@ -50,4 +50,20 @@ describe('RegisterForm', () => {
     mountedWrapper.find('button').simulate('click');
     expect(props.onSubmit).toHaveBeenCalledWith(expected);
   });
+
+  it('should show error if password and confirm password fields are different', () => {
+    const mountedWrapper = mount(<RegisterForm {...props} />);
+    mountedWrapper.setState({
+      email: "john@ex.com",
+      password: "password",
+      confirmPassword: "pass"
+    });
+    console.log(mountedWrapper.find('TextField').length)
+    mountedWrapper.find('TextField')
+      .forEach(tf => {
+        console.log(tf);
+        // if (tf.props().name === "confirmPassword") {
+        // }
+      });
+  });
 });
