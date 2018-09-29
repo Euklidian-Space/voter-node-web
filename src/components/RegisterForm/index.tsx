@@ -1,28 +1,39 @@
 import * as React from 'react';
 import { Button, TextField } from '@material-ui/core';
+import { connect } from 'react-redux';
+// import { Store } from '../../reducers/store';
+import { Dispatch } from '../../actions/types';
+import { registrationRequest } from '../../actions';
 const Component = React.Component;
 
-export interface IRegisterForm {
+interface IRegisterForm {
   onSubmit: (arg: {
     confirmPassword: string,
     email: string, 
     password: string}) => void;
 }
 
-export interface IRegisterFormState {
+interface IRegisterFormState {
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-class RegisterForm extends Component<IRegisterForm, IRegisterFormState> {
+interface ConnectedDispatch {
+  registrationRequest: () => void;
+}
+
+type Props = IRegisterForm & ConnectedDispatch;
+
+export class RegisterForm extends Component<Props, IRegisterFormState> {
+
   private fieldProps: { 
     email: object, 
     password: object, 
     confirmPassword: object
   };
 
-  constructor(props: IRegisterForm) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       confirmPassword: '',
@@ -134,5 +145,11 @@ const styles = {
   } as React.CSSProperties
 
 };
+
+const mapDispatchToProps = (dispatch: Dispatch): ConnectedDispatch => ({
+    registrationRequest: () => {
+      dispatch(registrationRequest());
+    }
+  });
  
-export default RegisterForm;
+export default connect(null, mapDispatchToProps)(RegisterForm);

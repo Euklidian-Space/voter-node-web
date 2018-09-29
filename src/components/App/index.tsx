@@ -1,8 +1,9 @@
 import * as React from 'react';
 import './App.css';
-import LoginForm from '../LoginForm';
+// import LoginForm from '../LoginForm';
 
 import logo from './logo.svg';
+import RegisterForm from '../RegisterForm';
 
 class App extends React.Component {
   public render() {
@@ -12,7 +13,9 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <LoginForm onSubmit={this.onSubmit} />
+        <div style={styles.formContainer}>
+          <RegisterForm onSubmit={this.onSubmit} />
+        </div>
       </div>
     );
   }
@@ -21,5 +24,13 @@ class App extends React.Component {
     console.log("Login form Submitted!");
   }
 }
+
+const styles = {
+  formContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
+  }
+};
 
 export default App;
